@@ -30,7 +30,7 @@ function Selector(props) {
   const placeholder = props.placeholder;
   const style = props.style;
   const theme = useTheme();
-  const [value, setvalue] = React.useState([]);
+  const [value, setvalue] = React.useState(placeholder);
   const handleChange = (event) => {
     const {
       target: { value },
@@ -48,16 +48,10 @@ function Selector(props) {
       <FormControl >
         <Select
           displayEmpty
-          value={value}
+          defaultValue={props.placeholder}
+          //value={//value}
           onChange={handleChange}
           input={<OutlinedInput />}
-          renderValue={(selected) => {
-            if (selected.length === 0) {
-              return <em>{placeholder}</em>;
-            }
-
-            return selected.join(', ');
-          }}
           style={style}
           MenuProps={MenuProps}
           inputProps={{ 'aria-label': 'Without label' }}

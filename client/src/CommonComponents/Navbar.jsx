@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Menu, Drawer, Button, notification } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "../index.css";
 import { BellTwoTone } from "@ant-design/icons";
+import AuthContext from "../context/auth/authContext";
 
 const { SubMenu } = Menu;
 const openNotification = (placement) => {
@@ -15,25 +16,29 @@ const openNotification = (placement) => {
   });
 };
 function Navbar(props) {
+  const authContext = useContext(AuthContext);
+  const {logout} = authContext;
   const [visible, setVisible] = useState(false);
+  function handleClick(event) {
+    localStorage.setItem("showSession","true");
+    setVisible(false);
+  }
   const menuItems = [];
   let childrens;
   props.menu.forEach((item) => {
-    if (item.children === null) {
+    if (item.children === null && item.display!=="hidden") {
       menuItems.push(
         <Menu.Item key={item.key} icon={item.icon}>
           <Link to={item.path}>{item.name}</Link>
         </Menu.Item>
       );
-    } else {
-      childrens = [];
+    } else if(item.display!=="hidden") {
+      childrens=[];
       item.children.forEach((child) => {
-        childrens.push(
-          <Menu.Item key={child.key}>
-            <Link to={child.path}>{child.name}</Link>
-          </Menu.Item>
-        );
-      });
+        childrens.push(<Menu.Item key={child.key}>
+          <Link to={child.path}>{child.name}</Link>
+        </Menu.Item>);
+      })
       menuItems.push(
         <SubMenu key={item.key} icon={item.icon} title={item.name}>
           {childrens}
@@ -51,11 +56,10 @@ function Navbar(props) {
       <Drawer
         title="IPRP"
         placement="left"
-        onClick={() => setVisible(false)}
         onClose={() => setVisible(false)}
         visible={visible}
       >
-        <Menu theme="dark" defaultSelectedKeys={["/st/home"]} mode="inline">
+        <Menu theme="dark" defaultSelectedKeys={["/st/home"]} mode="inline" onClick={handleClick}>
           {menuItems}
         </Menu>
       </Drawer>
@@ -64,8 +68,9 @@ function Navbar(props) {
         <BellTwoTone />
       </Button>
       <span>
-        <Button type="primary" danger style={{marginRight:"10px"}}>
-          <a href="/">Log Out</a>
+        <Button type="primary" danger style={{marginRight:"10px"}}
+       >
+         <a href="#"  onClick  = {()=>{logout();console.log("logout");}} >Log Out</a>
         </Button>
       </span>
       </div>

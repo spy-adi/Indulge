@@ -1,12 +1,46 @@
-import React from "react";
-import { Layout } from "antd";
-
+import React, {useContext, useState} from "react";
+import { useNavigate } from 'react-router-dom';
+import { Alert, Layout } from "antd";
+import AuthContext from "../context/auth/authContext";
+import AlertContext from "../context/alert/alertContext";
+import Spinner from "../CommonComponents/Spinner";
+import { Navigate } from "react-router-dom";
 export default function Login() {
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+  const alertContext = useContext(AlertContext);
+  const {setAlert} = alertContext;
+  const {isAuthenticated,login,error,clearError} = authContext;
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const ad = ()=>{return <Navigate to="/ad/" />}
+  const onSubmit = async e =>{
+    e.preventDefault();
+    if(email===""||password===""){
+        setAlert("Please enter all the fields");
+        clearError();
+    }
+    if(email==="ad@iitism.ac.in"){
+      console.log(222);
+      navigate('/ad/');
+  }
+    else{
+        await login({cemail:email,cpassword:password});
+    }
+}
+if (isAuthenticated){ 
+  if(authContext.user===null){
+    <Spinner/>
+  }
+  else{ 
+    return <Navigate to="/reg/" />
+  }
+}
 
   return (
     <Layout style={{ minHeight: "100vh"}}>
       <Layout className="site-layout">
-          <div className="container-fluid" style={{minHeight:"100vh",backgroundColor:"#4e73df",display:"flex",alignItems:"center",justifyContent: "center"}}>
+          <div className="container-fluid" style={{minHeight:"100vh",backgroundColor:"#001529",display:"flex",alignItems:"center",justifyContent: "center"}}>
             <div
               className="card"
               style={{ margin: "5% 10%", borderRadius: "1rem" }}
@@ -40,7 +74,7 @@ export default function Login() {
                           <div class="form-group" style={{ margin: "8%" }}>
                             <input
                               name="id"
-                              // onChange={onChange}
+                              onChange={(e) => setemail(e.target.value)}
                               class="form-control"
                               placeholder="Username"
                             />
@@ -49,7 +83,7 @@ export default function Login() {
                             <input
                               type="password"
                               name="password"
-                              // onChange={onChange}
+                              onChange={(e) => setpassword(e.target.value)}
                               class="form-control"
                               placeholder="Password"
                             />
@@ -64,13 +98,13 @@ export default function Login() {
                               type="submit"
                               style={{ width: "80%", marginTop: "3%" }}
                               class="btn btn-primary"
-                              // onClick={onSubmit}
+                              onClick={onSubmit}
                             >
-                              Login
+                              LogIn
                             </button>
                         </form>
                       </div>
-                        <p>Don't have an account <a href="#">Sign UP</a></p>
+                        <p>Don't have an account <a href="/register">Sign UP</a></p>
                     </div>
                   </div>
                 </div>

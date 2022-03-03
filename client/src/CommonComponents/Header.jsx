@@ -1,26 +1,23 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Button, Layout, notification } from "antd";
 import "../index.css";
 import { BellTwoTone } from "@ant-design/icons";
-
+import AuthContext from "../context/auth/authContext";
 const { Header } = Layout;
 
-function Headerr() {
-  const [size, setSize] = useState(window.innerWidth);
+const openNotification = (placement) => {
+  notification.info({
+    message: `Notification ${placement}`,
+    description:
+      "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+    placement,
+  });
+};
 
-  // const openNotification = (placement) => {
-  //   notifications.forEach(element => {
-  //     notification.info({
-  //       message: "XYZ",
-  //       description: "ABC",
-  //       placement,
-  //     });
-  //   });
-  // };
-  
-  const onLogout = ()=>{
-      // logout();
-  }
+function Headerr() {
+  const authContext = useContext(AuthContext);
+  const {logout} = authContext;
+  const [size, setSize] = useState(window.innerWidth);
   React.useEffect(() => {
     function handleResize() {
       setSize(window.innerWidth);
@@ -40,7 +37,7 @@ function Headerr() {
             style={{ height: "65px", display: "inline", marginLeft: "20px" }}
           />
           <h3 style={{ color: "#396EB0", display: "inline" }}>
-            IIT (ISM), Dhanbad
+            IIT (ISM) Dhanbad
           </h3>
         </span>
       </Header>
@@ -58,23 +55,23 @@ function Headerr() {
             Indian Institute of Technology (ISM), Dhanbad
           </h3>
         </span>
-        <div style={{float:"right"}}>
-            <Button className="notif" 
-            // data-count={unreadNotifications ? unreadNotifications : 0} 
-            // spin="true" onClick={()=> openNotification('topRight')} 
-            style={{marginRight:"10px"}}>
-        <BellTwoTone />
-      </Button>
-      <span>
-        <Button type="primary" danger style={{marginRight:"10px"}}>
-          <a href="#" onClick={onLogout}>Log Out</a>
-        </Button>
-      </span>
-      </div>
+        <div style={{ float: "right" }}>
+          <Button
+            spin="true"
+            onClick={() => openNotification("topRight")}
+            style={{ marginRight: "10px" }}
+          >
+            <BellTwoTone />
+          </Button>
+          <span>
+            <Button type="primary" danger style={{ marginRight: "10px" }}>
+            <a href="#"  onClick  = {()=>{logout();console.log("logout");}} >Log Out</a>
+            </Button>
+          </span>
+        </div>
       </Header>
     );
   }
 }
 
 export default Headerr;
-

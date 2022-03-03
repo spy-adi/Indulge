@@ -90,21 +90,3 @@
   color: #fff;
   height: calc(100vh - 55px);
 }
-
-.notif:before {
-  content: attr(data-count);
-  width: 20px;
-  height: 20px;
-  opacity: 1;
-  line-height: 18px;
-  text-align: center;
-  display: block;
-  border-radius: 50%;
-  background: rgb(244, 44, 44);
-  border: 1px solid #FFF;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.4);
-  color: #FFF;
-  position: absolute;
-  top: -7px;
-  left: -7px;
-}
